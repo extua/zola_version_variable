@@ -1,5 +1,5 @@
 use crate::Site;
-use libs::tera::Result as TeraResult;
+use libs::{image::imageops::vertical_gradient, tera::Result as TeraResult};
 use std::sync::Arc;
 use templates::{filters, global_fns};
 
@@ -9,7 +9,12 @@ pub fn register_early_global_fns(site: &mut Site) -> TeraResult<()> {
         "num_format",
         filters::NumFormatFilter::new(&site.config.default_language),
     );
-
+    site.tera.register_function(
+        "version",
+        global_fns::ZolaVersion::new(
+            "".to_string()
+        )
+    );
     site.tera.register_function(
         "get_url",
         global_fns::GetUrl::new(

@@ -13,3 +13,4 @@ pub use self::files::{GetHash, GetUrl};
 pub use self::i18n::Trans;
 pub use self::images::{GetImageMetadata, ResizeImage};
 pub use self::load_data::LoadData;
+pub use self::helpers::ZolaVersion;

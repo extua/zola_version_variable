@@ -2,6 +2,8 @@ use std::borrow::Cow;
 use std::path::{Path, PathBuf};
 
 use errors::{bail, Result};
+use libs::tera::{to_value, Function as TeraFn, Value};
+use std::collections::HashMap;
 use utils::fs::is_path_in_directory;
 
 /// This is used by a few Tera functions to search for files on the filesystem.
@@ -55,5 +57,24 @@ pub fn search_for_file(
         Ok(Some((file_path, actual_path.into_owned())))
     } else {
         Ok(None)
+    }
+}
+
+#[derive(Debug)]
+pub struct ZolaVersion {
+    version: String,
+}
+impl ZolaVersion {
+    pub fn new(version: String) -> Self {
+        Self { version }
+    }
+}
+impl TeraFn for ZolaVersion {
+    fn call(&self, #[allow(unused_variables)] args: &HashMap<String, Value>) -> libs::tera::Result<Value> {
+        let version: String = env!("CARGO_PKG_VERSION").to_string();
+        Ok(to_value(version).unwrap())
+    }
+    fn is_safe(&self) -> bool {
+        true
     }
 }
